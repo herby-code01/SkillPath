@@ -1,0 +1,36 @@
+{
+  "id": "transformers-llms",
+  "title": "Transformers & LLM Applications",
+  "why": "Transformers power modern language, vision and code models; knowing the mechanism makes you better at using and evaluating them.",
+  "explain": [
+    "A transformer processes a sequence of token embeddings with self-attention. Each token forms a query, a key and a value vector. Attention weights = softmax(Q K^T / sqrt(d)) say how much each token reads from every other token, and the output is the weighted sum of the values. Multiple heads attend to different relationships in parallel.",
+    "A block is attention plus a feed-forward network, each wrapped in a residual connection and layer normalization. Positional information is added because attention alone does not know order. A language model applies a causal mask so token t sees only tokens up to t, and trains by predicting the next token with cross-entropy.",
+    "Large language models are these networks scaled up, then adapted with prompting, retrieval (RAG), fine-tuning (including parameter-efficient methods such as LoRA) and tool use. Evaluating an LLM feature means building task-specific test sets, checking faithfulness to the sources and tracking cost and latency, not trusting demos."
+  ],
+  "key_points": [
+    "Attention = softmax(QK^T / sqrt(d)) V",
+    "Causal masking makes next-token training possible",
+    "Residual connections and layer norm keep deep stacks trainable",
+    "RAG for fresh or private knowledge; fine-tuning for style and behavior",
+    "Evaluate LLM features on your own test set, with regression checks"
+  ],
+  "pitfalls": [
+    "Forgetting the causal mask lets the model peek at the answer during training",
+    "Evaluating generation quality on a few cherry-picked prompts"
+  ],
+  "leetcode": [
+    {"n": 239, "why": "A monotonic deque handles windowed maxima, the pattern behind local and sliding-window attention."},
+    {"n": 76, "why": "Finding the smallest window that satisfies a condition mirrors selecting minimal context."},
+    {"n": 146, "why": "An LRU cache is the intuition behind key-value caching during generation."},
+    {"n": 394, "why": "Stack-based decoding of nested structure builds the habit needed for parsing and tokenization logic."},
+    {"n": 1143, "why": "Longest common subsequence underlies text-similarity metrics such as ROUGE-L."}
+  ],
+  "industry": [
+    {"kind": "concept", "q": "Why are attention scores divided by the square root of the key dimension?",
+     "key_points": ["Dot products grow with dimension, pushing softmax into saturation", "Scaling keeps the variance near 1", "Saturated softmax gives tiny gradients and unstable training"]},
+    {"kind": "design", "q": "RAG or fine-tuning for a company-documents assistant? Defend your choice.",
+     "key_points": ["Knowledge that changes often points to RAG", "Fine-tune for tone, format or specialized behavior", "They can be combined", "Compare cost, latency, evaluation, citation needs and privacy"]},
+    {"kind": "design", "q": "How do you evaluate an LLM-powered feature before launch?",
+     "key_points": ["A representative labeled test set and a clear rubric", "Automatic checks plus human review; spot-check any LLM-as-judge", "Faithfulness, hallucination and safety tests", "Latency and cost budgets", "A regression suite rerun on every prompt or model change"]}
+  ]
+}

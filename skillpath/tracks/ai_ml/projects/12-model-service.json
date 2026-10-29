@@ -1,0 +1,42 @@
+{
+  "id": "model-service",
+  "title": "Production Model API with Tests & Drift Monitoring",
+  "level": 5,
+  "hours": 18,
+  "blurb": "Wrap a trained model in a validated, tested, containerized API that watches for drift.",
+  "brief": "Take any model you trained earlier and ship it properly. Expose it behind an HTTP API with input validation, a health endpoint and structured logging. Write unit, model and API tests, containerize the service, and add a drift monitor that compares live feature distributions against the training data (PSI or a KS test) and exposes the result. Include a load-test or latency measurement and a rollback note in the README.",
+  "requires": ["logreg-eval"],
+  "concepts": ["mlops-serving", "evaluation"],
+  "requirements": [
+    "A web API (Flask or FastAPI) with a predict endpoint and a health endpoint",
+    "Request validation that rejects malformed or out-of-range inputs with clear errors",
+    "Model loading at startup from a versioned artifact (without unpickling untrusted data)",
+    "Structured logging of requests, latency and errors",
+    "Tests for the preprocessing, the model behavior and the API contract",
+    "A drift check (PSI or KS) between training data and recent requests",
+    "A Dockerfile and a README covering run, test and rollback"
+  ],
+  "deliverables": [
+    "The service, tests and Dockerfile",
+    "A script demonstrating drift detection on shifted data",
+    "A latency measurement summary"
+  ],
+  "stretch": [
+    "Prometheus-style metrics endpoint",
+    "A CI workflow that runs the tests",
+    "Canary or shadow-mode switch"
+  ],
+  "resume_bullet": "Deployed an ML model as a validated, containerized API with automated tests, structured logging and PSI-based drift monitoring.",
+  "review": {
+    "seed": false,
+    "checks": [
+      {"label": "Web API endpoints", "any": ["flask", "fastapi", "route", "endpoint", "^app$"]},
+      {"label": "Input validation", "any": ["pydantic", "basemodel", "validate", "schema"]},
+      {"label": "Model artifact loading", "any": ["joblib", "load_model", "onnx", "state_dict", "pickle", "^load$"]},
+      {"label": "Health check", "any": ["health", "ready", "status"]},
+      {"label": "Logging / metrics", "any": ["logging", "logger", "metrics", "latency", "prometheus"]},
+      {"label": "Drift detection", "any": ["drift", "^psi", "ks_2samp", "population_stability"]},
+      {"label": "Dockerfile", "files": true, "any": ["dockerfile"]}
+    ]
+  }
+}

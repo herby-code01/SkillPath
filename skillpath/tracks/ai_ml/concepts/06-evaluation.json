@@ -1,0 +1,36 @@
+{
+  "id": "evaluation",
+  "title": "Model Evaluation & Validation",
+  "why": "A model you cannot evaluate honestly is a liability. Interviewers probe this constantly because real projects fail here.",
+  "explain": [
+    "Never judge a model on data it trained on. Split into train, validation and test: tune on validation, report once on test. With small data use k-fold cross-validation, rotating which fold is held out and averaging the scores; stratify so each fold keeps the class ratios.",
+    "Pick metrics that match the goal. Precision = TP / (TP + FP) says how many alerts are right; recall = TP / (TP + FN) says how many true cases you catch; F1 is their harmonic mean. ROC-AUC measures ranking quality across thresholds, and PR-AUC is more informative when positives are rare. For regression use MAE, RMSE and R-squared.",
+    "Watch for overfitting (training score far above validation), leakage (validation suspiciously good) and distribution shift (production data differs from training). Always compare against a trivial baseline, and use learning curves to tell whether you need more data or a better model."
+  ],
+  "key_points": [
+    "Train / validation / test discipline",
+    "Stratified k-fold for classification",
+    "Precision vs recall is a trade-off you set with the threshold",
+    "Start with a trivial baseline",
+    "Learning curves diagnose underfitting vs overfitting"
+  ],
+  "pitfalls": [
+    "Tuning hyperparameters on the test set",
+    "Random splits on time-ordered data"
+  ],
+  "leetcode": [
+    {"n": 643, "why": "Rolling averages over a window are how you monitor a metric over time."},
+    {"n": 295, "why": "Maintaining a running median with two heaps is how latency percentiles are tracked on streams."},
+    {"n": 973, "why": "Top-k by score is the retrieval and ranking evaluation primitive."},
+    {"n": 347, "why": "Selecting the k most frequent items shows up when you analyze errors by category."},
+    {"n": 981, "why": "Point-in-time lookups prevent leakage: you may only use values known at prediction time."}
+  ],
+  "industry": [
+    {"kind": "concept", "q": "Explain precision versus recall with an example where you would optimize each.",
+     "key_points": ["Precision when false alarms are expensive, such as auto-blocking accounts", "Recall when misses are expensive, such as cancer screening", "The threshold moves you along the trade-off", "F-beta or a cost matrix can combine them"]},
+    {"kind": "concept", "q": "Offline AUC is 0.92 but online performance is poor. List possible causes.",
+     "key_points": ["Training/serving skew in features", "Leakage in the offline evaluation", "Distribution shift or stale data", "The metric does not match the business KPI", "Feedback loops"]},
+    {"kind": "concept", "q": "How would you evaluate a model trained on time-ordered data?",
+     "key_points": ["Split by time or use walk-forward validation", "No features computed with future information", "Leave a gap when labels arrive late", "Report performance per period to catch drift"]}
+  ]
+}

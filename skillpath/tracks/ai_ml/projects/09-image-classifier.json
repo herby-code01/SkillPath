@@ -1,0 +1,42 @@
+{
+  "id": "image-classifier",
+  "title": "Image Classifier: CNN vs Transfer Learning",
+  "level": 4,
+  "hours": 18,
+  "blurb": "Train a small CNN, then beat it with transfer learning, and prove it with error analysis.",
+  "brief": "Pick an image dataset (CIFAR-10, a Kaggle dataset or your own photos). Train a small CNN from scratch with data augmentation, then fine-tune a pretrained backbone (for example ResNet or MobileNet) on the same split. Track training and validation curves, report accuracy per class with a confusion matrix, and study the misclassified images to explain what the model gets wrong.",
+  "requires": ["mini-nn"],
+  "concepts": ["cnn-vision", "neural-nets", "evaluation"],
+  "requirements": [
+    "A convolutional network with convolution and pooling layers",
+    "A data pipeline with train/validation/test splits and augmentation",
+    "A training loop with loss, optimizer and validation tracking",
+    "Transfer learning with a pretrained model (frozen backbone, then optional fine-tuning)",
+    "Per-class metrics and a confusion matrix",
+    "Saving and reloading the trained model, plus an error analysis of misclassified images"
+  ],
+  "deliverables": [
+    "Training scripts for both approaches",
+    "A results table and curves comparing them",
+    "A predict script that classifies a new image",
+    "README with the dataset source and results"
+  ],
+  "stretch": [
+    "Grad-CAM visualizations",
+    "Export to ONNX"
+  ],
+  "resume_bullet": "Trained CNN and transfer-learning image classifiers with augmentation, comparing them with per-class metrics and error analysis.",
+  "review": {
+    "seed": true,
+    "checks": [
+      {"label": "Convolutional layers", "any": ["conv2d", "conv", "convolution"]},
+      {"label": "Pooling", "any": ["pool"]},
+      {"label": "Data augmentation", "any": ["augment", "randomcrop", "randomflip", "transforms", "flip", "rotation"]},
+      {"label": "Training loop", "any": ["epoch", "optimizer", "backward", "^fit$"]},
+      {"label": "Validation tracking", "any": ["val", "validation", "valid_loader", "accuracy"]},
+      {"label": "Transfer learning", "any": ["pretrained", "resnet", "mobilenet", "efficientnet", "freeze", "requires_grad", "weights"]},
+      {"label": "Model saving", "any": ["save", "state_dict", "checkpoint", "load_model"]},
+      {"label": "Confusion matrix", "any": ["confusion", "classification_report"]}
+    ]
+  }
+}

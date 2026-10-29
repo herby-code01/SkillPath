@@ -1,0 +1,36 @@
+{
+  "id": "linear-models",
+  "title": "Linear Models & Gradient Descent",
+  "why": "Loss functions plus optimizers are how every model learns. Linear regression is the cleanest place to understand both.",
+  "explain": [
+    "Linear regression predicts y_hat = Xw + b. We choose w to minimize mean squared error (MSE). There is a closed-form answer, the normal equation w = (X^T X)^-1 X^T y, and an iterative one that scales to huge problems: gradient descent.",
+    "Gradient descent repeatedly moves the weights against the gradient of the loss: w <- w - lr * grad. For MSE with n samples the gradient is (2/n) X^T (Xw - y). The learning rate matters: too large diverges, too small crawls. Standardizing features makes the loss surface rounder and training far faster.",
+    "Regularization adds a penalty on weight size to reduce overfitting. L2 (ridge) shrinks weights smoothly; L1 (lasso) drives some weights exactly to zero, producing sparse models. Both trade a little bias for lower variance."
+  ],
+  "key_points": [
+    "Loss function + optimizer = how a model learns",
+    "The gradient points uphill; step in the opposite direction",
+    "Standardize inputs before gradient descent",
+    "A learning rate that is too high makes the loss diverge",
+    "L1 gives sparsity, L2 gives shrinkage"
+  ],
+  "pitfalls": [
+    "Forgetting the bias/intercept term",
+    "The normal equation breaks on collinear features (singular X^T X); use lstsq/pinv or regularize"
+  ],
+  "leetcode": [
+    {"n": 69, "why": "Newton's method or binary search for a square root is iterative numerical optimization in miniature."},
+    {"n": 50, "why": "Fast exponentiation shows divide and conquer on a numeric problem."},
+    {"n": 875, "why": "Binary search over the answer space is how you search a monotonic hyperparameter or threshold."},
+    {"n": 121, "why": "Tracking a running minimum in one pass is the same single-sweep thinking used in online updates."},
+    {"n": 53, "why": "Kadane's algorithm carries the best-so-far state forward, a first taste of dynamic programming and online learning."}
+  ],
+  "industry": [
+    {"kind": "concept", "q": "Derive the gradient of mean squared error for linear regression and explain each term.",
+     "key_points": ["Loss L = (1/n) * sum((Xw - y)^2)", "Gradient = (2/n) X^T (Xw - y)", "(Xw - y) is the residual vector; X^T weights residuals by each feature", "Include the bias via a column of ones or a separate term"]},
+    {"kind": "concept", "q": "Training loss becomes NaN after a few steps. List your debugging checklist.",
+     "key_points": ["Learning rate too high", "Unscaled features or exploding values", "inf/NaN in the data, or log(0) in the loss", "Inspect gradient norms; lower the rate or clip gradients"]},
+    {"kind": "concept", "q": "When would you choose lasso over ridge?",
+     "key_points": ["Many irrelevant features and you want automatic selection (sparsity)", "Ridge is better when many correlated features each carry signal", "Elastic net blends both", "Tune the penalty strength with cross-validation"]}
+  ]
+}

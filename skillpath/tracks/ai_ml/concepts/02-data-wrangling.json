@@ -1,0 +1,36 @@
+{
+  "id": "data-wrangling",
+  "title": "Data Wrangling & EDA",
+  "why": "Most real ML time goes into understanding and cleaning data. Mistakes here silently poison every model downstream.",
+  "explain": [
+    "Real data is messy: missing values, duplicated rows, inconsistent categories, wrong types, outliers. Exploratory data analysis (EDA) means profiling it before modeling: shape, dtypes, missing percentage, duplicates, ranges and distributions.",
+    "In pandas, think in three moves: groupby (split-apply-combine), merge (joins) and vectorized column operations. Missing values need a deliberate strategy: drop, impute (mean, median, mode or a model), or add an is_missing indicator when the missingness itself carries signal.",
+    "Data leakage hides here. Any statistic you learn from data (a mean, a scaler, an encoder) must be fit on the training split only and then applied to validation and test data. With time-ordered data, never let future rows inform predictions about the past."
+  ],
+  "key_points": [
+    "Profile first: shape, dtypes, missing %, duplicates, value ranges",
+    "groupby and merge are the workhorses",
+    "Fit imputers, scalers and encoders on the training split only",
+    "Encode categoricals deliberately (one-hot, ordinal, target encoding with care)",
+    "Look at distributions, not just means"
+  ],
+  "pitfalls": [
+    "Joining on a non-unique key silently multiplies rows",
+    "Chained assignment can modify a copy instead of your DataFrame"
+  ],
+  "leetcode": [
+    {"n": 1, "why": "The hash-map lookup is exactly how joins and de-duplication stay fast."},
+    {"n": 49, "why": "Grouping by a canonical key is the hand-written version of groupby."},
+    {"n": 609, "why": "Finding duplicates by content key mirrors real data de-duplication."},
+    {"n": 721, "why": "Merging records that share an identifier is entity resolution, a daily data-cleaning task; solve it with union-find."},
+    {"n": 56, "why": "Merging overlapping time ranges is the core of sessionization and event windowing."}
+  ],
+  "industry": [
+    {"kind": "concept", "q": "You join a 1M-row orders table to a customers table and the result has 1.4M rows. What happened and how do you debug it?",
+     "key_points": ["The right-hand key is not unique (duplicate customers)", "Check key uniqueness before merging (validate many-to-one)", "Compare row counts and run an anti-join", "Deduplicate or aggregate first"]},
+    {"kind": "concept", "q": "30% of the values in an important feature are missing. How do you decide what to do?",
+     "key_points": ["Understand why: missing completely at random, at random, or not at random", "Compare drop rows, drop feature, impute, indicator column", "Fit the imputer on training data only", "Judge options by validation performance, not intuition"]},
+    {"kind": "concept", "q": "Give a concrete example of data leakage in a churn model and how you would prevent it.",
+     "key_points": ["A feature that only exists after the outcome, such as cancellation reason", "Fitting a scaler or encoder on the full dataset", "Random split on time-ordered data", "Use pipelines and time-based splits"]}
+  ]
+}

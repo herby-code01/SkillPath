@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% from "_macros.html" import meter, diff, status_form %}
+{% block title %}{{ concept['title'] }} - SkillPath{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('learn.index') }}">&larr; All concepts</a></p>
+<div class="page-head">
+  <div>
+    <p class="eyebrow">Concept</p>
+    <h1>{{ concept['title'] }}</h1>
+    <p class="lead">{{ concept['why'] }}</p>
+  </div>
+  <form method="post" action="{{ url_for('learn.mark_read', concept_id=concept['id']) }}" class="inline">
+    {{ csrf_field() }}
+    {% if m.read %}
+      <input type="hidden" name="read" value="0">
+      <button class="btn btn-ghost" type="submit">&#10003; Read &middot; undo</button>
+    {% else %}
+      <input type="hidden" name="read" value="1">
+      <button class="btn" type="submit">Mark primer as read</button>
+    {% endif %}
+  </form>
+</div>
+
+<div class="grid-2" style="align-items:start">
+  <div class="stack">
+    <section class="card prose">
+      <h2 style="margin-top:0">The idea</h2>
+      {% for para in concept['explain'] %}<p>{{ para }}</p>{% endfor %}
+      <h3>Remember</h3>
+      <ul>{% for k in concept['key_points'] %}<li>{{ k }}</li>{% endfor %}</ul>
+      {% if concept['pitfalls'] %}
+      <h3>Common pitfalls</h3>
+      <div class="callout warn"><ul style="margin:0">{% for k in concept['pitfalls'] %}<li>{{ k }}</li>{% endfor %}</ul></div>
+      {% endif %}
+    </section>
+
+    <section class="card">
+      <h2 style="margin-top:0">Industry-style questions</h2>
+      <p class="muted">Answer in your own words (at least {{ min_chars }} characters), then compare with what a strong answer covers. There is no automatic grading here: honest self-assessment is the skill.</p>
+      {% for q in concept['industry'] %}
+      {% set saved = progress.answers.get(q['id'], '') %}
+      <div class="qa" id="{{ q['id'] }}">
+        <p><span class="pill pill-muted">{{ q['kind'] }}</span> <strong>{{ q['q'] }}</strong></p>
+        <form method="post" action="{{ url_for('learn.answer_question', question_id=q['id']) }}" class="form">
+          {{ csrf_field() }}
+          <textarea name="answer" maxlength="{{ max_chars }}" aria-label="Your answer" placeholder="Explain it as you would to an interviewer...">{{ saved }}</textarea>
+          <div><button class="btn btn-small" type="submit">{{ 'Update answer' if saved else 'Save answer' }}</button></div>
+        </form>
+        {% if saved|length >= min_chars %}
+        <details open style="margin-top:.6rem">
+          <summary>What a strong answer covers</summary>
+          <ul>{% for k in q['key_points'] %}<li>{{ k }}</li>{% endfor %}</ul>
+        </details>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </section>
+  </div>
+
+  <div class="stack">
+    <section class="card card-accent">
+      <h3>Your mastery: {{ m.score }}%</h3>
+      {{ meter('Read primer', 100 if m.read else 0) }}
+      {{ meter('LeetCode (' ~ m.solved ~ '/' ~ m.problems ~ ' solved)', (m.parts.leetcode * 100)|round|int) }}
+      {{ meter('Questions (' ~ m.answered ~ '/' ~ m.questions ~ ')', (m.parts.industry * 100)|round|int) }}
+      {{ meter('Applied in a passed project', 100 if m.applied else 0) }}
+    </section>
+
+    <section class="card">
+      <h3>LeetCode practice for this concept</h3>
+      <p class="muted">Each problem is here because it drills the same idea.</p>
+      <ul class="list">
+        {% for p in problems %}
+        <li>
+          <span>
+            <a href="{{ p.url }}" target="_blank" rel="noopener noreferrer">#{{ p.n }} {{ p.title }}</a> {{ diff(p.difficulty) }}
+            <br><small class="muted">{{ p.why }}</small>
+          </span>
+          {{ status_form(p.n, progress.lc_status.get(p.n, 'todo'), url_for('learn.concept', concept_id=concept['id'])) }}
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section class="card">
+      <h3>Used in these projects</h3>
+      <ul class="list">
+        {% for p in used_by %}<li><a href="{{ url_for('cycles.project_detail', project_id=p['id']) }}">{{ p['title'] }}</a></li>{% endfor %}
+      </ul>
+    </section>
+  </div>
+</div>
+{% endblock %}

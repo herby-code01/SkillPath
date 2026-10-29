@@ -1,0 +1,36 @@
+{
+  "id": "prob-stats",
+  "title": "Probability & Statistics",
+  "why": "ML models estimate probabilities and you must reason about uncertainty, base rates and whether a result is real.",
+  "explain": [
+    "Probability quantifies uncertainty. Most ML models estimate a conditional distribution P(y | x). The core toolkit: expectation, variance, conditional probability, Bayes' rule and the common distributions (Bernoulli, Binomial, Gaussian, Poisson).",
+    "Bayes' rule says P(A | B) = P(B | A) P(A) / P(B). It explains why a test that is 99% accurate for a condition affecting 1% of people still produces mostly false alarms among its positives: the base rate matters. Naive Bayes classifiers are this rule applied directly.",
+    "Statistics asks how sure we are. Maximum likelihood estimation picks the parameters that make the observed data most probable; confidence intervals and hypothesis tests quantify sampling noise; and the bias-variance trade-off explains why simple models underfit while flexible ones overfit."
+  ],
+  "key_points": [
+    "P(A | B) and P(B | A) are different quantities",
+    "Bayes' rule and base rates",
+    "Law of large numbers and the central limit theorem",
+    "MLE: choose parameters that make the data most likely (Gaussian noise gives MSE, Bernoulli gives cross-entropy)",
+    "Bias-variance trade-off"
+  ],
+  "pitfalls": [
+    "Base-rate neglect: ignoring how rare the positive class is",
+    "Testing many hypotheses (or peeking at an A/B test) and reporting the one that looks significant"
+  ],
+  "leetcode": [
+    {"n": 528, "why": "Sampling from a discrete distribution with prefix sums plus binary search is how weighted sampling works in practice."},
+    {"n": 382, "why": "Reservoir sampling draws a uniform sample from a stream of unknown length."},
+    {"n": 384, "why": "The Fisher-Yates shuffle is how you correctly randomize training data."},
+    {"n": 380, "why": "O(1) random selection underlies mini-batch sampling and negative sampling."},
+    {"n": 1514, "why": "Multiplying probabilities along paths (or summing log-probabilities) is the same trick Naive Bayes uses."}
+  ],
+  "industry": [
+    {"kind": "concept", "q": "A fraud detector catches 95% of fraud and flags 5% of legitimate transactions. Fraud is 0.1% of all transactions. Roughly what fraction of flagged transactions are actually fraud?",
+     "key_points": ["Use base rates: per 100,000 transactions, 100 are fraud", "True positives = 95; false positives = 5% of 99,900, about 4,995", "Precision = 95 / (95 + 4,995), about 1.9%", "Conclusion: the threshold or model needs work, and costs should drive the decision"]},
+    {"kind": "concept", "q": "Explain maximum likelihood estimation to a non-expert and name two models whose loss comes from it.",
+     "key_points": ["Pick the parameters that make the observed data most probable", "Gaussian noise leads to mean squared error", "Bernoulli outcomes lead to cross-entropy", "Taking logs turns products into sums"]},
+    {"kind": "concept", "q": "Your A/B test shows a 2% lift with p = 0.04 after checking the dashboard daily for two weeks. Do you ship?",
+     "key_points": ["Repeated peeking inflates the false-positive rate", "Use a pre-set sample size or a sequential testing method", "Look at the confidence interval and practical significance", "Check guardrail metrics before shipping"]}
+  ]
+}

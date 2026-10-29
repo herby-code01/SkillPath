@@ -1,0 +1,40 @@
+{
+  "id": "spam-filter",
+  "title": "Naive Bayes Spam Filter",
+  "level": 2,
+  "hours": 10,
+  "blurb": "Classify SMS or email as spam with a hand-built Naive Bayes model and TF-IDF features.",
+  "brief": "Build a spam classifier from scratch: text cleaning and tokenization, a vocabulary built from the training set, a Naive Bayes classifier with Laplace smoothing working in log space, and a TF-IDF baseline for comparison. Use a public dataset such as the UCI SMS Spam Collection, split it properly, and report precision and recall with an error analysis of the messages you get wrong.",
+  "requires": [],
+  "concepts": ["nlp-text", "prob-stats", "evaluation"],
+  "requirements": [
+    "Text normalization and tokenization functions",
+    "A vocabulary built only from the training split",
+    "Naive Bayes with Laplace smoothing, computed with log probabilities",
+    "TF-IDF vectorization implemented by you",
+    "A train/test split and metrics (precision, recall, F1, confusion matrix)",
+    "Error analysis: print and discuss misclassified examples"
+  ],
+  "deliverables": [
+    "Model code and an evaluation script",
+    "README with dataset source, results and error analysis",
+    "Tests for tokenization and for the smoothing behavior on unseen words"
+  ],
+  "stretch": [
+    "Add bigrams and compare",
+    "Expose a small command-line classify tool"
+  ],
+  "resume_bullet": "Built a Naive Bayes + TF-IDF spam classifier from scratch with Laplace smoothing in log-space; achieved strong precision/recall with documented error analysis.",
+  "review": {
+    "seed": true,
+    "checks": [
+      {"label": "Tokenization / preprocessing", "any": ["tokeni", "preprocess", "normalize", "^clean", "findall", "^split$"]},
+      {"label": "Naive Bayes logic", "any": ["naive", "bayes", "prior", "likelihood", "log_prob"]},
+      {"label": "Smoothing", "any": ["smooth", "laplace", "^alpha$"]},
+      {"label": "Log-space computation", "any": ["^log$", "logsumexp", "log_prior", "log_prob"]},
+      {"label": "TF-IDF", "any": ["tfidf", "tf_idf", "^idf", "^tf$"]},
+      {"label": "Train/test split", "any": ["train_test_split", "^split", "holdout", "^test_"]},
+      {"label": "Evaluation metrics", "any": ["precision", "recall", "^f1", "confusion", "accuracy"]}
+    ]
+  }
+}

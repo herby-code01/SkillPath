@@ -1,0 +1,35 @@
+{
+  "id": "neural-nets",
+  "title": "Neural Networks & Backpropagation",
+  "why": "Deep learning is built on this one mechanism. Knowing backprop lets you debug training instead of guessing.",
+  "explain": [
+    "A neural network stacks layers. Each layer applies a linear map and then a nonlinearity (ReLU, tanh, sigmoid). Without the nonlinearity, stacked layers collapse into one linear map. The forward pass computes predictions and the loss measures the error.",
+    "Backpropagation applies the chain rule backward through the layers to get the gradient of the loss with respect to every weight. Each layer needs only its local derivative and the gradient arriving from the layer above, and it reuses values cached during the forward pass. Optimizers such as SGD with momentum or Adam then update the weights using mini-batches.",
+    "Training health depends on initialization (He for ReLU, Xavier for tanh), learning rate, batch size and regularization (dropout, weight decay, early stopping). Always verify your backprop with a numerical gradient check: (L(w + eps) - L(w - eps)) / (2 eps) should match the analytic gradient to roughly 1e-7 relative error."
+  ],
+  "key_points": [
+    "Nonlinear activations are what give depth its power",
+    "Backprop = chain rule + caching forward values",
+    "Mini-batch SGD and Adam are the standard optimizers",
+    "Initialization and learning rate decide whether training starts well",
+    "Gradient checking catches backprop bugs"
+  ],
+  "pitfalls": [
+    "Vanishing or exploding gradients in deep stacks with saturating activations",
+    "Shape mismatches in the backward pass that broadcasting hides"
+  ],
+  "leetcode": [
+    {"n": 207, "why": "Detecting cycles in a dependency graph: a computation graph must be a DAG for backprop to work."},
+    {"n": 210, "why": "A topological order is the order you run the forward pass; its reverse is the backward pass."},
+    {"n": 150, "why": "Evaluating an expression with a stack is a forward pass over a tiny computation graph."},
+    {"n": 70, "why": "Memoizing subresults is the same idea as caching activations to reuse during backprop."}
+  ],
+  "industry": [
+    {"kind": "concept", "q": "Why do neural networks need nonlinear activation functions?",
+     "key_points": ["Composition of linear maps is still linear", "Nonlinearity lets the network represent complex decision boundaries", "Choice of activation affects gradient flow (ReLU vs sigmoid)"]},
+    {"kind": "concept", "q": "Explain vanishing gradients and two ways to mitigate them.",
+     "key_points": ["Sigmoid and tanh saturate, so gradients shrink as they multiply through layers", "Use ReLU-family activations, residual connections or normalization layers", "Better initialization such as He or Xavier", "Gated architectures in recurrent networks"]},
+    {"kind": "concept", "q": "Training accuracy is 100% and validation accuracy is 70%. What are your next steps?",
+     "key_points": ["Diagnose overfitting", "Add data or augmentation", "Regularize: dropout, weight decay, early stopping", "Simplify the model", "Check the validation split for leakage or shift"]}
+  ]
+}

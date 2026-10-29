@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Settings - SkillPath{% endblock %}
+{% block content %}
+<section class="narrow" style="width:min(560px,100%); margin-top:1rem">
+  <h1>Settings</h1>
+  <form method="post" class="form card">
+    {{ csrf_field() }}
+    <label>Career track
+      <select name="track_id">
+        {% for t in tracks %}
+          <option value="{{ t['id'] }}" {{ 'selected' if t['id'] == g.user['track_id'] }}>{{ t['name'] }}</option>
+        {% endfor %}
+      </select>
+      <small>More tracks are planned. AI / Machine Learning is the first.</small>
+    </label>
+    <label>Weeks per project cycle
+      <input name="cycle_weeks" type="number" inputmode="numeric" min="{{ min_weeks }}" max="{{ max_weeks }}"
+             value="{{ g.user['cycle_weeks'] }}" required>
+      <small>You get this many weeks to build and submit each project ({{ min_weeks }}-{{ max_weeks }}).
+        Changing it affects projects you start from now on, not the one in progress.</small>
+    </label>
+    <button class="btn" type="submit">Save settings</button>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">Project-driven learning</p>
+  <h1>Build your way into AI / ML, one project per cycle.</h1>
+  <p class="lead">
+    You choose the cycle length. SkillPath gives you a project, teaches the concepts you need first,
+    ties them to LeetCode and industry-style questions, reviews your code, scores it, and picks what
+    to build next.
+  </p>
+  <div class="actions">
+    <a class="btn" href="{{ url_for('auth.register') }}">Start your path</a>
+    <a class="btn btn-ghost" href="{{ url_for('auth.login') }}">I have an account</a>
+  </div>
+</section>
+
+<section class="grid-3">
+  <article class="card">
+    <h3>1. Learn first</h3>
+    <p>Every project starts with a primer on the concepts behind it, so you are never coding blind.</p>
+  </article>
+  <article class="card">
+    <h3>2. Build and submit</h3>
+    <p>Finish within your cycle, upload the code, and get a scored review with specific fixes.</p>
+  </article>
+  <article class="card">
+    <h3>3. Master the interview side</h3>
+    <p>Each concept maps to LeetCode problems and industry questions, so problem solving grows with the portfolio.</p>
+  </article>
+</section>
+{% endblock %}

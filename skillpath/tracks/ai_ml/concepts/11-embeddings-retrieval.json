@@ -1,0 +1,36 @@
+{
+  "id": "embeddings-retrieval",
+  "title": "Embeddings, Search & RAG",
+  "why": "Retrieval-augmented generation is the most common LLM application pattern in industry right now.",
+  "explain": [
+    "An embedding maps text (or images) to a dense vector so that similar meanings land close together. Similarity is usually cosine similarity: the dot product of length-normalized vectors, where 1 means the same direction and 0 means unrelated.",
+    "Semantic search embeds the query and the documents, then returns the top-k nearest vectors. Exact search costs O(n * d) per query; approximate nearest-neighbor indexes (HNSW, IVF) trade a little recall for large speedups. Chunking long documents, with some overlap, matters: chunks that are too big dilute meaning, and chunks that are too small lose context.",
+    "Retrieval quality is measured with recall@k, MRR and nDCG on a labeled set of queries. Retrieval-augmented generation (RAG) puts the retrieved chunks into the prompt so an LLM answers from your data and can cite sources. Most RAG failures are retrieval failures, so evaluate retrieval separately from generation."
+  ],
+  "key_points": [
+    "Cosine similarity = dot product of normalized vectors",
+    "Chunk size and overlap are tunable design choices",
+    "Exact vs approximate nearest-neighbor search is a recall/latency trade-off",
+    "Evaluate retrieval (recall@k, MRR) separately from generation",
+    "Cite sources and allow the system to say it does not know"
+  ],
+  "pitfalls": [
+    "Embedding documents and queries with different models",
+    "Judging a RAG system by a handful of demo questions"
+  ],
+  "leetcode": [
+    {"n": 973, "why": "Top-k nearest points is the brute-force vector search routine."},
+    {"n": 23, "why": "Merging ranked result lists from several shards is a k-way heap merge."},
+    {"n": 146, "why": "An LRU cache is how hot queries and embeddings are kept fast."},
+    {"n": 981, "why": "Versioned lookups handle documents that change over time."},
+    {"n": 347, "why": "Selecting top-k items by score is the final step of every ranking pipeline."}
+  ],
+  "industry": [
+    {"kind": "concept", "q": "Your RAG assistant gives confident wrong answers. How do you debug it?",
+     "key_points": ["Separate retrieval from generation", "Measure recall@k on labeled queries", "Inspect chunk size, overlap and metadata", "Add a not-found fallback and citations", "Consider reranking and stricter grounding prompts"]},
+    {"kind": "concept", "q": "Cosine similarity, dot product or Euclidean distance for embeddings? Does it matter?",
+     "key_points": ["For normalized vectors all three give the same ranking", "Cosine ignores vector magnitude", "Use the metric the embedding model was trained with"]},
+    {"kind": "design", "q": "Design semantic search for 50 million documents that change throughout the day.",
+     "key_points": ["ANN index such as HNSW or IVF-PQ with sharding", "Incremental upserts plus periodic rebuilds", "Hybrid keyword (BM25) and vector retrieval with a reranker", "Caching and a latency budget", "An evaluation set and live monitoring"]}
+  ]
+}

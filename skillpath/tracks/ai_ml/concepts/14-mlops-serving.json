@@ -1,0 +1,35 @@
+{
+  "id": "mlops-serving",
+  "title": "Serving, Testing & Monitoring ML",
+  "why": "A model in a notebook is not a product. Shipping and maintaining models is what separates ML engineers from experimenters.",
+  "explain": [
+    "Serving means packaging the model together with its preprocessing, exposing a stable interface (REST, gRPC or a batch job), validating inputs and meeting latency and reliability targets. Training/serving skew, where training and production compute features differently, is a top cause of silent failures, so share one code path for both.",
+    "Test ML systems at several levels: unit tests for transforms, data validation (schema and ranges), model tests (minimum accuracy on a golden set, invariance checks) and API contract tests. Version code, data and models so any prediction can be reproduced, and run the checks in CI.",
+    "In production, monitor latency, errors, input drift (for example the population stability index or a KS test) and outcome quality once labels arrive. Have a rollback plan, use shadow or canary deployments, and cache repeated requests where it is safe."
+  ],
+  "key_points": [
+    "One shared code path for training and serving features",
+    "Validate inputs at the API boundary",
+    "Test data, transforms, the model and the API separately",
+    "Monitor drift as well as latency and errors",
+    "Canary or shadow deployments with a rollback plan"
+  ],
+  "pitfalls": [
+    "Loading a pickled model from an untrusted source (arbitrary code execution)",
+    "Monitoring only uptime and never the quality of predictions"
+  ],
+  "leetcode": [
+    {"n": 146, "why": "LRU caching is the standard answer for speeding up repeated predictions."},
+    {"n": 981, "why": "Time-versioned storage models feature stores and point-in-time correctness."},
+    {"n": 621, "why": "Scheduling tasks with cooldowns resembles batch-job and rate-limit planning."},
+    {"n": 355, "why": "Merging per-user event streams with heaps is the core of feed and timeline ranking services."}
+  ],
+  "industry": [
+    {"kind": "concept", "q": "What is training/serving skew and how do you prevent it?",
+     "key_points": ["Features computed differently offline and online", "Share the same transformation code or use a feature store", "Log served features and compare with training distributions", "Add integration tests on a golden dataset"]},
+    {"kind": "concept", "q": "How do you detect and respond to data drift?",
+     "key_points": ["Compare live feature distributions with training (PSI, KS test)", "Monitor the prediction distribution and delayed labels", "Alert thresholds with retrain or rollback triggers", "Separate covariate drift from concept drift"]},
+    {"kind": "design", "q": "Design an API that serves a fraud model at 2,000 requests per second with p99 latency under 50 ms.",
+     "key_points": ["Stateless replicas behind a load balancer with the model held in memory", "Low-latency feature lookups with caching", "Timeouts, fallbacks and circuit breakers", "Observability, canary releases and load tests"]}
+  ]
+}

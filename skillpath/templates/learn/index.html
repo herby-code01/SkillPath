@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% from "_macros.html" import meter %}
+{% block title %}Concepts - SkillPath{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <p class="eyebrow">{{ track['name'] }}</p>
+    <h1>Concepts</h1>
+    <p class="muted">Each primer explains what a project needs you to know, then ties it to LeetCode problems and interview-style questions. Mastery blends reading, problem solving, written answers and applying it in a passed project.</p>
+  </div>
+</div>
+<div class="grid-2">
+  {% for c in track['concepts'] %}
+  {% set m = mastery[c['id']] %}
+  <article class="card project-card">
+    <div class="row" style="justify-content:space-between">
+      <h3 style="margin:0"><a href="{{ url_for('learn.concept', concept_id=c['id']) }}">{{ c['title'] }}</a></h3>
+      {% if m.read %}<span class="pill pill-good">Read</span>{% endif %}
+    </div>
+    <p class="muted" style="margin:0">{{ c['why'] }}</p>
+    {{ meter('Mastery', m.score) }}
+    <small class="muted">
+      LeetCode {{ m.solved }}/{{ m.problems }} &middot; questions {{ m.answered }}/{{ m.questions }}
+      &middot; used in {{ used_by[c['id']]|length }} project{{ 's' if used_by[c['id']]|length != 1 }}
+    </small>
+  </article>
+  {% endfor %}
+</div>
+{% endblock %}

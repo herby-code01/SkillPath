@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Review: {{ project['title'] if project else 'Submission' }} - SkillPath{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('cycles.project_detail', project_id=assignment['project_id']) }}">&larr; {{ project['title'] }}</a></p>
+
+<div class="page-head">
+  <div class="row" style="gap:1.5rem">
+    <div class="score-ring {{ 'ok' if report.passed else 'fail' }}" aria-label="Score {{ report.score }} out of 100">{{ report.score }}</div>
+    <div>
+      <p class="eyebrow">Review of {{ submission['filename'] }}</p>
+      <h1>{% if report.passed %}Passed{% else %}Not a pass yet{% endif %}</h1>
+      <p class="muted">Pass mark {{ report.pass_score }} &middot; {{ report.coverage }}% of the project requirements found
+        &middot; submitted {{ submission['submitted_at']|fmtdatetime }}{% if report.late %} &middot; late{% endif %}</p>
+    </div>
+  </div>
+</div>
+
+{% if report.gates %}
+<div class="callout warn stack">
+  <strong>These must be fixed before this can pass:</strong>
+  <ul>{% for g_ in report.gates %}<li>{{ g_ }}</li>{% endfor %}</ul>
+</div>
+{% endif %}
+
+{% if report.passed and next_project %}
+<section class="card card-accent" style="margin-top:1rem">
+  <p class="eyebrow">Next up</p>
+  <h2 style="margin-top:0"><a href="{{ url_for('cycles.project_detail', project_id=next_project['id']) }}">{{ next_project['title'] }}</a></h2>
+  <p class="muted">{{ reason }}</p>
+  <a class="btn" href="{{ url_for('cycles.dashboard') }}">Go to dashboard</a>
+</section>
+{% endif %}
+
+{% if report.next_steps %}
+<section class="card" style="margin-top:1rem">
+  <h2 style="margin-top:0">Biggest improvements</h2>
+  <ol>{% for step in report.next_steps %}<li>{{ step }}</li>{% endfor %}</ol>
+</section>
+{% endif %}
+
+{% if report.adjustments %}
+<section class="card" style="margin-top:1rem">
+  <h3>Adjustments</h3>
+  <ul>{% for a in report.adjustments %}<li>{{ a }}</li>{% endfor %}</ul>
+</section>
+{% endif %}
+
+<div class="grid-2" style="margin-top:1rem; align-items:start">
+  {% for cat in report.categories %}
+  <section class="card">
+    <div class="row" style="justify-content:space-between">
+      <h3 style="margin:0">{{ cat.name }}</h3>
+      <span class="mono muted">{{ cat.earned }} / {{ cat.max }}</span>
+    </div>
+    {% for f in cat.findings %}
+    <div class="finding {{ f.status }}">
+      <span class="dot" aria-label="{{ f.status }}">{{ {'pass': '✓', 'warn': '!', 'fail': '✗'}[f.status] }}</span>
+      <div>
+        <strong>{{ f.label }}</strong> <span class="muted mono">{{ f.earned }}/{{ f.max }}</span>
+        {% if f.detail %}<div class="muted">{{ f.detail }}</div>{% endif %}
+        {% if f.fix %}<div class="fix">How to fix: {{ f.fix }}</div>{% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </section>
+  {% endfor %}
+</div>
+
+<p class="muted" style="margin-top:1.5rem"><small>
+  This automated review reads your code's structure and engineering habits (it never runs your code),
+  so it cannot prove an algorithm is correct. Treat a pass as "built the way the brief describes",
+  and verify results with your own tests.
+  {{ report.stats.python_files }} Python file(s), {{ report.stats.code_lines }} lines of code reviewed.
+</small></p>
+{% endblock %}

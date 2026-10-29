@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% from "_macros.html" import level_pill %}
+{% block title %}Roadmap - SkillPath{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <p class="eyebrow">{{ track['name'] }}</p>
+    <h1>Roadmap</h1>
+    <p class="muted">{{ track['description'] }}</p>
+  </div>
+</div>
+
+{% for level, items in groups %}
+<section class="level-group">
+  <div class="level-title">Level {{ level }} &middot; {{ track['levels'][level|string] }}</div>
+  <div class="grid-2" style="margin-top:.6rem">
+    {% for item in items %}
+    {% set p = item.project %}
+    <article class="card project-card {{ 'done' if item.status == 'passed' }} {{ 'locked' if item.status == 'locked' }} {{ 'recommended' if item.recommended }}">
+      <div class="row" style="justify-content:space-between">
+        <h3 style="margin:0"><a href="{{ url_for('cycles.project_detail', project_id=p['id']) }}">{{ p['title'] }}</a></h3>
+        {% if item.status == 'passed' %}<span class="pill pill-good">Passed &middot; {{ item.score }}</span>
+        {% elif item.status == 'active' %}<span class="pill pill-warn">In progress</span>
+        {% elif item.recommended %}<span class="pill">Recommended</span>
+        {% elif item.status == 'locked' %}<span class="pill pill-muted">Locked</span>
+        {% else %}<span class="pill pill-muted">Available</span>{% endif %}
+      </div>
+      <p class="muted" style="margin:0">{{ p['blurb'] }}</p>
+      <div class="chips">
+        {% for cid in p['concepts'] %}<span class="pill pill-muted">{{ track['concept_map'][cid]['title'] }}</span>{% endfor %}
+      </div>
+      <small class="muted">~{{ p['hours'] }} hours
+        {% if item.status == 'locked' %}&middot; needs: {{ item.missing|join(', ') }}{% endif %}
+        {% if item.status in ('available', 'active') or item.recommended %}&middot; readiness {{ item.readiness }}%{% endif %}</small>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+{% endfor %}
+{% endblock %}

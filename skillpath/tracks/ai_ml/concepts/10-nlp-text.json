@@ -1,0 +1,36 @@
+{
+  "id": "nlp-text",
+  "title": "Text Processing & Classic NLP",
+  "why": "Classic text methods are fast, strong baselines and the string-handling skills reappear in coding interviews.",
+  "explain": [
+    "Text must become numbers. A typical pipeline normalizes the text (lowercase, strip punctuation), tokenizes it, optionally removes stop words, then vectorizes it. Bag-of-words counts tokens; TF-IDF weights a term by how often it appears in a document (TF) times how rare it is across documents (IDF), which downweights words like 'the'.",
+    "Naive Bayes classifies text with P(class) times the product of P(word | class), assuming words are independent given the class. Despite that naive assumption it is a strong, fast baseline for spam and topic classification. Use Laplace (add-one) smoothing so unseen words do not zero out the product, and add log-probabilities rather than multiplying to avoid numeric underflow.",
+    "Modern NLP replaces counts with subword tokens (BPE, WordPiece) and learned embeddings, but classic methods remain valuable baselines, and tools like edit distance, tries and sliding windows are still everywhere in search, autocomplete and data cleaning."
+  ],
+  "key_points": [
+    "Normalize, tokenize, vectorize",
+    "TF-IDF = term frequency times inverse document frequency",
+    "Naive Bayes: priors x likelihoods, in log space, with smoothing",
+    "Always fit the vocabulary on training data only",
+    "Edit distance and tries power spell-check and autocomplete"
+  ],
+  "pitfalls": [
+    "Multiplying many small probabilities underflows to zero; use log space",
+    "Building the vocabulary from the test set leaks information"
+  ],
+  "leetcode": [
+    {"n": 242, "why": "Comparing character counts is the bag-of-words idea on a tiny scale."},
+    {"n": 692, "why": "Counting words and breaking ties is the heart of frequency features."},
+    {"n": 208, "why": "A trie powers autocomplete and fast vocabulary lookups."},
+    {"n": 139, "why": "Segmenting a string against a dictionary is the DP behind word-piece style tokenization."},
+    {"n": 72, "why": "Edit distance is the classic measure for spelling correction and fuzzy matching."}
+  ],
+  "industry": [
+    {"kind": "concept", "q": "Why does Naive Bayes use log probabilities?",
+     "key_points": ["Products of many small numbers underflow", "Logs turn the product into a sum", "The class with the highest log-posterior is unchanged", "Mention logsumexp if normalized probabilities are needed"]},
+    {"kind": "concept", "q": "Explain TF-IDF and describe a case where it fails.",
+     "key_points": ["TF times log(N / document frequency)", "Fails on synonyms and ignores word order and meaning", "Needs length normalization", "Embeddings or BM25 are alternatives"]},
+    {"kind": "design", "q": "Design a spam filter that must score each message in under 10 ms, and say how you would evaluate it.",
+     "key_points": ["Sparse TF-IDF or hashed features with a linear model or Naive Bayes", "Precompute the vocabulary; keep inference allocation-light", "Prioritize precision because blocking legitimate mail is costly", "Monitor drift and retrain as spammers adapt"]}
+  ]
+}

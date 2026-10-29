@@ -1,0 +1,40 @@
+{
+  "id": "segmentation",
+  "title": "Customer Segmentation with k-Means & kNN",
+  "level": 3,
+  "hours": 12,
+  "blurb": "Cluster customers with your own k-means, choose k scientifically, and add a kNN classifier.",
+  "brief": "Take a customer or e-commerce dataset, clean and scale it, then implement k-means (with k-means++ initialization, convergence checks and inertia tracking) and a kNN classifier yourself. Pick k using the elbow method and silhouette score, label the segments in plain business language, and test how stable they are across random seeds.",
+  "requires": ["data-explorer"],
+  "concepts": ["distance-clustering", "data-wrangling"],
+  "requirements": [
+    "Feature scaling and a documented cleaning step",
+    "k-means with centroid assignment, centroid update, tolerance and max iterations",
+    "k-means++ (or a clearly documented alternative) initialization",
+    "Inertia/elbow and silhouette score computed by you",
+    "A kNN classifier using an efficient top-k selection",
+    "A stability check across random seeds and a short business interpretation of each cluster"
+  ],
+  "deliverables": [
+    "Clustering and kNN modules",
+    "A report with the elbow plot, silhouette scores and cluster profiles",
+    "Tests on small synthetic blobs with known clusters"
+  ],
+  "stretch": [
+    "Hierarchical clustering or DBSCAN comparison",
+    "PCA for 2D visualization"
+  ],
+  "resume_bullet": "Built k-means (k-means++, silhouette analysis) and kNN from scratch to segment customers, validating cluster stability across seeds.",
+  "review": {
+    "seed": true,
+    "checks": [
+      {"label": "Distance computation", "any": ["euclid", "distance", "norm", "cdist", "cosine"]},
+      {"label": "k-means assignment/update", "any": ["kmeans", "centroid", "assign", "cluster"]},
+      {"label": "Smart initialization", "any": ["kmeans_plus", "kmeanspp", "init_centroids", "init", "plus_plus"]},
+      {"label": "Convergence control", "any": ["converge", "^tol$", "max_iter", "inertia"]},
+      {"label": "Elbow / silhouette", "any": ["silhouette", "elbow", "inertia", "wcss"]},
+      {"label": "kNN", "any": ["knn", "neighbors", "k_nearest", "argpartition", "nsmallest", "heapq"]},
+      {"label": "Feature scaling", "any": ["scaler", "standardi", "normaliz", "minmax", "zscore"]}
+    ]
+  }
+}

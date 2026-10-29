@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% from "_macros.html" import meter, level_pill, timeline, problem_row, submit_form, attempts_list %}
+{% block title %}Dashboard - SkillPath{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <p class="eyebrow">{{ track['name'] }}</p>
+    <h1>Hi {{ g.user['username'] }}</h1>
+    <p class="muted">Cycle length: {{ g.user['cycle_weeks'] }} week{{ 's' if g.user['cycle_weeks'] != 1 }}.
+      <a href="{{ url_for('cycles.settings') }}">Change</a></p>
+  </div>
+</div>
+
+<section class="grid-3" aria-label="Your progress">
+  <div class="card stat"><div class="big">{{ stats.passed }}<small class="muted">/{{ stats.total }}</small></div><div class="label">projects passed</div></div>
+  <div class="card stat"><div class="big">{{ stats.avg_score if stats.avg_score is not none else '-' }}</div><div class="label">average review score</div></div>
+  <div class="card stat"><div class="big">{{ stats.lc_solved }}<small class="muted">/{{ stats.lc_total }}</small></div><div class="label">LeetCode problems solved</div></div>
+</section>
+
+{% if assignment %}
+<section class="card card-accent stack" style="margin-top:1.25rem">
+  <div class="page-head" style="margin-bottom:0">
+    <div>
+      <p class="eyebrow">Current project</p>
+      <h2 style="margin-top:0"><a href="{{ url_for('cycles.project_detail', project_id=project['id']) }}">{{ project['title'] }}</a></h2>
+      <p class="muted">{{ project['blurb'] }}</p>
+    </div>
+    <div>
+      {% if assignment['status'] == 'needs_revision' %}<span class="pill pill-warn">Needs revision</span>
+      {% elif timing.overdue %}<span class="pill pill-bad">Overdue</span>
+      {% else %}<span class="pill pill-good">In progress</span>{% endif %}
+    </div>
+  </div>
+
+  <div>
+    <div class="progress {{ 'warn' if timing.overdue }}" role="progressbar" aria-valuenow="{{ timing.pct_time }}" aria-valuemin="0" aria-valuemax="100" aria-label="Cycle time used"><span style="width: {{ timing.pct_time }}%"></span></div>
+    <p class="muted" style="margin-top:.4rem">
+      {% if timing.overdue %}Due {{ timing.due|fmtdate }}, {{ -timing.days_left }} day{{ 's' if timing.days_left != -1 }} ago.
+      {% else %}{{ timing.days_left }} day{{ 's' if timing.days_left != 1 }} left &middot; due {{ timing.due|fmtdate }}.{% endif %}
+      {% if assignment['extended_count'] %}Extended {{ assignment['extended_count'] }}&times;.{% endif %}
+    </p>
+  </div>
+
+  {% if readiness < ready_threshold %}
+  <div class="callout warn">
+    Your readiness for this project is <strong>{{ readiness }}%</strong>. Spend your Learn phase on the
+    primers and the LeetCode sprint below before heavy coding.
+  </div>
+  {% endif %}
+
+  <div class="row">
+    <a class="btn" href="{{ url_for('cycles.project_detail', project_id=project['id']) }}">Open project brief</a>
+    <form method="post" action="{{ url_for('cycles.extend', assignment_id=assignment['id']) }}" class="inline"
+          data-confirm="Extend the deadline by {{ assignment['cycle_weeks'] }} week(s)? Extensions are tracked.">
+      {{ csrf_field() }}<button class="btn btn-ghost" type="submit">Extend deadline</button>
+    </form>
+    <form method="post" action="{{ url_for('cycles.abandon', assignment_id=assignment['id']) }}" class="inline"
+          data-confirm="Drop this project? You can pick another from the roadmap.">
+      {{ csrf_field() }}<button class="btn btn-danger" type="submit">Drop project</button>
+    </form>
+  </div>
+
+  <hr style="border:0;border-top:1px solid var(--line);width:100%">
+  {{ submit_form(assignment) }}
+  {{ attempts_list(attempts) }}
+</section>
+
+<div class="grid-2" style="margin-top:1.25rem">
+  <section class="card">
+    <h3>Cycle plan</h3>
+    {{ timeline(schedule) }}
+  </section>
+  <section class="card">
+    <h3>LeetCode sprint for this cycle</h3>
+    <p class="muted">{{ sprint|length }} problems chosen from this project's concepts, easiest first.</p>
+    {% if sprint %}<ul class="list">{% for p in sprint %}{{ problem_row(p) }}{% endfor %}</ul>
+    {% else %}<p>You have solved every linked problem. Nice.</p>{% endif %}
+  </section>
+</div>
+
+{% else %}
+<section class="card card-accent stack" style="margin-top:1.25rem">
+  {% if recommended %}
+  <p class="eyebrow">Your next project</p>
+  <h2 style="margin-top:0"><a href="{{ url_for('cycles.project_detail', project_id=recommended['id']) }}">{{ recommended['title'] }}</a></h2>
+  <p>{{ recommended['blurb'] }}</p>
+  <p class="muted">{{ reason }}</p>
+  {{ meter('Readiness (concepts you have studied)', readiness, warn=readiness < ready_threshold) }}
+  <div class="row">
+    <form method="post" action="{{ url_for('cycles.start_project', project_id=recommended['id']) }}" class="inline">
+      {{ csrf_field() }}
+      <button class="btn" type="submit">Start a {{ g.user['cycle_weeks'] }}-week cycle</button>
+    </form>
+    <a class="btn btn-ghost" href="{{ url_for('cycles.project_detail', project_id=recommended['id']) }}">Read the brief and primers first</a>
+  </div>
+  {% if alternatives %}
+  <details>
+    <summary>Choose a different available project</summary>
+    <ul class="list">
+      {% for p in alternatives %}
+      <li><span><a href="{{ url_for('cycles.project_detail', project_id=p['id']) }}">{{ p['title'] }}</a> {{ level_pill(p['level'], track) }}</span></li>
+      {% endfor %}
+    </ul>
+  </details>
+  {% endif %}
+  {% else %}
+  <p class="eyebrow">Track complete</p>
+  <h2 style="margin-top:0">You have passed every project in {{ track['name'] }}.</h2>
+  <p>Polish your best three for your portfolio, and keep working through the LeetCode and industry questions.</p>
+  {% endif %}
+</section>
+{% endif %}
+
+<section class="card" style="margin-top:1.25rem">
+  <h3>Focus areas</h3>
+  <p class="muted">Your least-practiced concepts right now.</p>
+  {% for c in weakest %}{{ meter(c['title'], mastery[c['id']]['score']) }}{% endfor %}
+</section>
+{% endblock %}

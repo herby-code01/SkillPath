@@ -1,0 +1,41 @@
+{
+  "id": "logreg-eval",
+  "title": "Logistic Regression + Evaluation Suite",
+  "level": 2,
+  "hours": 12,
+  "blurb": "Build a classifier and the metrics around it, all by hand.",
+  "brief": "Implement binary logistic regression with NumPy, then write your own evaluation toolkit: confusion matrix, accuracy, precision, recall, F1, ROC curve and AUC, and stratified k-fold cross-validation. Use it to study how the decision threshold changes precision and recall on an imbalanced dataset.",
+  "requires": ["linreg-scratch"],
+  "concepts": ["classification", "evaluation", "linear-models"],
+  "requirements": [
+    "Sigmoid, binary cross-entropy loss and gradient descent training, with probabilities clipped for numeric safety",
+    "fit, predict_proba and predict (with a configurable threshold)",
+    "Your own confusion matrix, precision, recall and F1 functions",
+    "ROC curve points and AUC computed without a library",
+    "Stratified k-fold cross-validation written by you",
+    "A threshold study on an imbalanced dataset with a plot or table"
+  ],
+  "deliverables": [
+    "Model and metrics modules",
+    "A report showing metrics per fold and the threshold study",
+    "Tests comparing your metrics with known small examples"
+  ],
+  "stretch": [
+    "Add class weights and compare to resampling",
+    "Add a calibration curve"
+  ],
+  "resume_bullet": "Built logistic regression and a full evaluation suite (ROC/AUC, stratified CV) from scratch, analyzing precision-recall trade-offs on imbalanced data.",
+  "review": {
+    "seed": true,
+    "checks": [
+      {"label": "Sigmoid / softmax", "any": ["sigmoid", "expit", "softmax"]},
+      {"label": "Cross-entropy loss", "any": ["cross_entropy", "log_loss", "^bce$", "nll", "binary_crossentropy"]},
+      {"label": "predict_proba and predict", "any": ["^predict_proba$"]},
+      {"label": "Confusion matrix", "any": ["confusion", "true_positive", "^tp$", "^fp$", "^fn$", "^tn$"]},
+      {"label": "Precision / recall / F1", "any": ["precision", "recall", "^f1"]},
+      {"label": "ROC / AUC", "any": ["roc", "^auc"]},
+      {"label": "Stratified k-fold", "any": ["stratif", "kfold", "k_fold", "fold"]},
+      {"label": "Threshold handling", "any": ["threshold"]}
+    ]
+  }
+}

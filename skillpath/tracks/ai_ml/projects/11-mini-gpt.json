@@ -1,0 +1,41 @@
+{
+  "id": "mini-gpt",
+  "title": "Tiny GPT: A Character-Level Transformer",
+  "level": 5,
+  "hours": 24,
+  "blurb": "Implement causal self-attention and train a small language model that generates text.",
+  "brief": "Build a small decoder-only transformer language model: a character-level tokenizer, token and positional embeddings, masked multi-head self-attention, feed-forward blocks with residual connections and layer norm, a training loop with cross-entropy loss, and a text generation function with temperature and top-k sampling. Train it on a text corpus (public-domain books work well) and document what the samples look like as training progresses and as you change model size.",
+  "requires": ["mini-nn"],
+  "concepts": ["transformers-llms", "neural-nets"],
+  "requirements": [
+    "A tokenizer with encode/decode and a vocabulary built from the corpus",
+    "Token and positional embeddings",
+    "Scaled dot-product attention with a causal mask and multiple heads",
+    "Transformer blocks with layer normalization and residual connections",
+    "A training loop with cross-entropy loss, an optimizer and train/validation loss reporting",
+    "Sampling with temperature and top-k"
+  ],
+  "deliverables": [
+    "Model, training and generation code",
+    "Loss curves and sample text at several checkpoints",
+    "Tests for the causal mask and the tokenizer round-trip",
+    "A write-up of how block count, heads and context length affected results"
+  ],
+  "stretch": [
+    "A BPE tokenizer",
+    "KV caching in the generation loop"
+  ],
+  "resume_bullet": "Implemented and trained a GPT-style transformer (causal multi-head attention, layer norm, residuals) from scratch, with temperature/top-k sampling.",
+  "review": {
+    "seed": true,
+    "checks": [
+      {"label": "Attention mechanism", "any": ["attention", "attn", "scaled_dot", "softmax"]},
+      {"label": "Causal mask", "any": ["tril", "triu", "causal", "mask"]},
+      {"label": "Embeddings", "any": ["embedding", "pos_emb", "positional", "wte", "wpe"]},
+      {"label": "Transformer blocks", "any": ["block", "layernorm", "layer_norm", "feedforward", "feed_forward", "residual", "^mlp$"]},
+      {"label": "Tokenizer", "any": ["tokeniz", "vocab", "stoi", "itos", "^encode$", "^decode$"]},
+      {"label": "Training loop", "any": ["optimizer", "cross_entropy", "backward", "^loss"]},
+      {"label": "Generation / sampling", "any": ["generate", "temperature", "multinomial", "top_k", "sample"]}
+    ]
+  }
+}

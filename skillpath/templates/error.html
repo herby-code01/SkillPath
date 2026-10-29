@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}{{ code }} - SkillPath{% endblock %}
+{% block content %}
+<section class="narrow center">
+  <p class="eyebrow">Error {{ code }}</p>
+  <h1>{{ message }}</h1>
+  <p><a class="btn" href="{{ url_for('main.index') }}">Back home</a></p>
+</section>
+{% endblock %}

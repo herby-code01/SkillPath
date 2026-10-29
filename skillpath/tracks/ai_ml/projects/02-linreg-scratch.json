@@ -1,0 +1,42 @@
+{
+  "id": "linreg-scratch",
+  "title": "Linear Regression from Scratch",
+  "level": 1,
+  "hours": 10,
+  "blurb": "Implement linear regression with gradient descent and the normal equation, and verify against scikit-learn.",
+  "brief": "Implement linear regression twice using only NumPy: once with batch gradient descent and once with the closed-form solution. Train on a real regression dataset, plot the loss curve, show the effect of feature scaling and learning rate, and verify your weights match scikit-learn's. Add L2 regularization as an option.",
+  "requires": [],
+  "concepts": ["python-numpy", "linear-models", "prob-stats"],
+  "requirements": [
+    "A LinearRegression class with fit and predict methods",
+    "Batch gradient descent with a configurable learning rate and iteration count",
+    "A closed-form solver (normal equation, lstsq or pinv)",
+    "Feature standardization applied using training statistics only",
+    "MSE (and R-squared) computed by your own code and a recorded loss history",
+    "Optional L2 regularization and a comparison against scikit-learn"
+  ],
+  "deliverables": [
+    "The implementation as an importable module",
+    "A script or notebook that trains on a dataset and plots the loss curve",
+    "A short write-up of what happens with bad learning rates and unscaled features",
+    "Tests that check the two solvers agree"
+  ],
+  "stretch": [
+    "Add mini-batch and stochastic gradient descent",
+    "Add polynomial features and show overfitting"
+  ],
+  "resume_bullet": "Implemented linear regression from scratch in NumPy (gradient descent and closed form with L2 regularization), validated against scikit-learn.",
+  "review": {
+    "seed": true,
+    "checks": [
+      {"label": "fit method", "any": ["^fit$", "^train$"]},
+      {"label": "predict method", "any": ["^predict$"]},
+      {"label": "Gradient computation", "any": ["grad", "gradient", "^dw$", "d_w"]},
+      {"label": "Learning rate parameter", "any": ["learning_rate", "^lr$", "^alpha$", "^eta$"]},
+      {"label": "Loss / MSE implementation", "any": ["mse", "mean_squared", "^loss", "^cost", "rmse"]},
+      {"label": "Closed-form solution", "any": ["lstsq", "^solve$", "pinv", "^inv$", "normal_eq", "closed_form"]},
+      {"label": "Feature scaling", "any": ["standardi", "normaliz", "scaler", "^std$", "zscore"]},
+      {"label": "Regularization option", "any": ["l2", "ridge", "regulari", "^lam", "weight_decay"]}
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "id": "cnn-vision",
+  "title": "Convolutions & Computer Vision",
+  "why": "Vision is a core ML specialty and a clear demonstration of how architecture encodes assumptions about data.",
+  "explain": [
+    "A convolution slides a small learned filter over an image, taking a dot product at each position. Because the same filter is reused everywhere, a CNN needs far fewer parameters than a fully connected network and detects a pattern wherever it appears. Early layers learn edges, later layers learn parts and objects.",
+    "Pooling downsamples feature maps and adds tolerance to small shifts. The output size along each dimension is floor((n + 2p - k) / s) + 1 for input size n, kernel k, padding p and stride s. Batch normalization, dropout and data augmentation (flips, crops, color jitter) fight overfitting.",
+    "In practice you rarely train from scratch. Transfer learning starts from a network pretrained on a large dataset (for example ResNet on ImageNet), freezes or fine-tunes some layers, and often beats a from-scratch model that used ten times more of your own data."
+  ],
+  "key_points": [
+    "Weight sharing gives translation equivariance and few parameters",
+    "Output size = floor((n + 2p - k) / s) + 1",
+    "Augmentation is cheap regularization",
+    "Transfer learning: freeze the backbone, train the head, then fine-tune carefully",
+    "Evaluate on images that look like production, not just the benchmark"
+  ],
+  "pitfalls": [
+    "Data leakage through near-duplicate images across the train/validation split",
+    "Augmentations that change the label (for example flipping digits or text)"
+  ],
+  "leetcode": [
+    {"n": 733, "why": "Flood fill is region growing, a basic image-segmentation operation."},
+    {"n": 695, "why": "Measuring connected-component size is how you count and size objects in a mask."},
+    {"n": 304, "why": "The integral image (2D prefix sum) answers region queries in O(1) and underpins classic detectors."},
+    {"n": 542, "why": "Multi-source BFS computes a distance transform over an image grid."},
+    {"n": 289, "why": "Updating each cell from its neighborhood is the same access pattern as a convolution."}
+  ],
+  "industry": [
+    {"kind": "concept", "q": "A conv layer takes a 32x32x3 input and uses 16 filters of size 5x5 with stride 1 and padding 2. What are the output shape and the parameter count?",
+     "key_points": ["Output: (32 + 4 - 5) / 1 + 1 = 32, so 32x32x16", "Parameters per filter: 5*5*3 weights + 1 bias = 76", "Total: 76 * 16 = 1,216", "Padding 2 with a 5x5 kernel keeps the spatial size ('same')"]},
+    {"kind": "design", "q": "You have 500 labeled images. How do you build a good classifier?",
+     "key_points": ["Transfer learning from a pretrained model", "Data augmentation", "Freeze the backbone first, then fine-tune with a small learning rate", "Stratified split or cross-validation", "Error analysis on misclassified images"]},
+    {"kind": "concept", "q": "A vision model works in the lab but fails on phone photos. Why might that happen?",
+     "key_points": ["Distribution shift: lighting, blur, resolution, framing", "Augment to resemble production and collect real samples", "Evaluate on production-like data", "Monitor live inputs and predictions"]}
+  ]
+}

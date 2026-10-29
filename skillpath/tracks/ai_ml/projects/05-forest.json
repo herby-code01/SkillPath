@@ -1,0 +1,41 @@
+{
+  "id": "forest",
+  "title": "Decision Tree & Random Forest from Scratch",
+  "level": 3,
+  "hours": 14,
+  "blurb": "Grow trees with Gini impurity and combine them into a random forest.",
+  "brief": "Implement a decision tree classifier (Gini or entropy, threshold search, depth and leaf-size limits), then a random forest with bootstrap sampling and random feature subsets. Compare a single tree, your forest and scikit-learn's forest on a dataset, show the overfitting gap of a deep tree, and compute feature importances.",
+  "requires": ["logreg-eval"],
+  "concepts": ["trees-ensembles", "evaluation"],
+  "requirements": [
+    "A tree-node structure and a recursive tree builder",
+    "Gini impurity or entropy with a best-split search over feature thresholds",
+    "Stopping rules: max depth and minimum samples per leaf",
+    "Random forest with bootstrap samples and a random feature subset per split",
+    "Majority-vote prediction",
+    "Feature importance (impurity-based or permutation)"
+  ],
+  "deliverables": [
+    "Tree and forest modules with a fit/predict interface",
+    "A comparison of train vs test accuracy for different depths",
+    "Tests on tiny hand-checkable datasets"
+  ],
+  "stretch": [
+    "Out-of-bag error estimate",
+    "Regression trees"
+  ],
+  "resume_bullet": "Implemented decision trees and random forests from scratch (Gini splits, bagging, feature subsampling) and benchmarked them against scikit-learn.",
+  "review": {
+    "seed": true,
+    "checks": [
+      {"label": "Impurity measure", "any": ["gini", "entropy", "information_gain", "impurity"]},
+      {"label": "Best-split search", "any": ["best_split", "find_split", "split", "threshold"]},
+      {"label": "Tree structure / recursion", "any": ["^node$", "treenode", "build_tree", "decisiontree", "_grow", "^tree$"]},
+      {"label": "Depth / leaf limits", "any": ["max_depth", "min_samples", "min_leaf"]},
+      {"label": "Bootstrap sampling", "any": ["bootstrap", "resample", "^choice$"]},
+      {"label": "Random feature subsets", "any": ["max_features", "feature_subset", "n_features", "feature_idx"]},
+      {"label": "Voting", "any": ["vote", "majority", "bincount", "^mode$", "most_common"]},
+      {"label": "Feature importance", "any": ["importance"]}
+    ]
+  }
+}

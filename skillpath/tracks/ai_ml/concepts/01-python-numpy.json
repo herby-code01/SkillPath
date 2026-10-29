@@ -1,0 +1,36 @@
+{
+  "id": "python-numpy",
+  "title": "Python & NumPy for ML",
+  "why": "Every ML library is arrays underneath. Fast, correct array code is the foundation for everything else.",
+  "explain": [
+    "A NumPy array is a block of typed memory with a shape. Operations on whole arrays (vectorization) run in compiled loops, so replacing a Python for-loop over samples with array math is typically 10-100x faster.",
+    "Broadcasting lets arrays of different shapes combine: shapes are compared from the right, and each dimension must match or be 1. Subtracting a (n_features,) mean vector from a (n_samples, n_features) matrix just works. Most shape bugs come from forgetting which axis you are reducing over: axis=0 collapses rows (one result per column), axis=1 collapses columns (one result per row).",
+    "Learn to think in shapes. Write the shape of every array in a comment. A matrix multiply (n, d) @ (d, k) gives (n, k), and that single operation is the core of linear models and neural networks."
+  ],
+  "key_points": [
+    "Vectorize: avoid Python loops over samples",
+    "Broadcasting aligns shapes from the right; dimensions must match or be 1",
+    "axis=0 reduces down the rows, axis=1 across the columns; keepdims=True preserves rank",
+    "Use np.random.default_rng(seed) for reproducible randomness",
+    "Slicing returns views; fancy indexing returns copies"
+  ],
+  "pitfalls": [
+    "A (n,) array combined with an (n, 1) array silently broadcasts to (n, n)",
+    "Integer dtype arrays truncate float results unless you cast"
+  ],
+  "leetcode": [
+    {"n": 566, "why": "Reshaping is the everyday NumPy operation; do it by index math to understand what reshape really does."},
+    {"n": 867, "why": "Transpose swaps axes; the same idea is behind X.T in every gradient formula."},
+    {"n": 48, "why": "In-place matrix index manipulation builds comfort with 2D array coordinates."},
+    {"n": 238, "why": "Prefix and suffix products are the loop-free pattern behind cumulative operations (cumprod/cumsum)."},
+    {"n": 304, "why": "2D prefix sums (integral images) give O(1) region sums and reappear in computer vision."}
+  ],
+  "industry": [
+    {"kind": "concept", "q": "Without loops, how would you compute the pairwise Euclidean distance matrix between two sets of points? Explain the shapes involved.",
+     "key_points": ["Expand (a-b)^2 = a^2 + b^2 - 2ab, or broadcast with new axes", "Shapes: (n,d) and (m,d) give (n,m)", "Broadcasting to (n,m,d) costs memory; the dot-product form does not", "Clip tiny negative values from float error before the square root"]},
+    {"kind": "coding", "q": "Implement softmax for a (batch, classes) matrix so that it does not overflow on large logits.",
+     "key_points": ["Subtract the row max before exponentiating", "Use keepdims=True so the division broadcasts", "Each row sums to 1", "Mention log-sum-exp when you need log-probabilities"]},
+    {"kind": "concept", "q": "A teammate's feature-normalization code gives wrong results only when the dataset has a single column. What shape bug do you suspect?",
+     "key_points": ["A 1-D array vs a 2-D (n,1) array handled differently", "reshape(-1, 1) or keepdims to stabilize shapes", "Wrong axis in mean/std", "Add shape assertions and a one-column unit test"]}
+  ]
+}

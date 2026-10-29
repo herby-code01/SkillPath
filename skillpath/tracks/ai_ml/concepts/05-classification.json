@@ -1,0 +1,35 @@
+{
+  "id": "classification",
+  "title": "Classification & Logistic Regression",
+  "why": "Most business ML problems are classification: fraud, churn, spam, diagnosis. Logistic regression is the baseline you always beat first.",
+  "explain": [
+    "Logistic regression turns a linear score z = w.x + b into a probability with the sigmoid function 1 / (1 + e^-z). You predict class 1 when the probability passes a threshold. The default is 0.5, but the right threshold depends on the costs of each kind of mistake.",
+    "Its loss is binary cross-entropy: -[y log p + (1 - y) log(1 - p)]. It punishes confident wrong answers very heavily. The gradient has a neat form, (1/n) X^T (p - y): the same shape as linear regression's gradient, with predicted probabilities in place of raw predictions.",
+    "For more than two classes, softmax converts a vector of scores into probabilities that sum to one, and cross-entropy is computed over classes. The decision boundary of logistic regression is linear; to bend it, engineer features or move to nonlinear models."
+  ],
+  "key_points": [
+    "Sigmoid for binary problems, softmax for multi-class",
+    "Cross-entropy is the negative log-likelihood of the labels",
+    "Gradient: X^T (p - y) / n",
+    "The threshold is a business decision, not a constant",
+    "For imbalanced data, reweight classes or resample"
+  ],
+  "pitfalls": [
+    "log(0): clip probabilities to [eps, 1 - eps]",
+    "Treating predicted probabilities as calibrated without checking"
+  ],
+  "leetcode": [
+    {"n": 704, "why": "Binary search over sorted scores is how you find a decision threshold."},
+    {"n": 75, "why": "Three-way partitioning is the same operation as splitting examples into classes."},
+    {"n": 169, "why": "The majority-element algorithm is the simplest possible classifier baseline."},
+    {"n": 347, "why": "Counting and selecting the most frequent class or label is a constant companion in evaluation code."}
+  ],
+  "industry": [
+    {"kind": "concept", "q": "Why use cross-entropy instead of mean squared error for classification?",
+     "key_points": ["MSE with a sigmoid has vanishing gradients when the model is confidently wrong", "Cross-entropy is the maximum-likelihood loss for Bernoulli labels and is convex for logistic regression", "It gives a stronger, better-behaved gradient signal"]},
+    {"kind": "concept", "q": "Your classifier reports 99% accuracy but the positive class is 1% of the data. What do you do?",
+     "key_points": ["Always predicting negative also scores 99%, so accuracy is misleading", "Report precision, recall and PR-AUC", "Reweight, resample or move the threshold", "Tie the choice to the business cost of each error"]},
+    {"kind": "coding", "q": "Write predict_proba and the loss for binary logistic regression with NumPy and no Python loops.",
+     "key_points": ["p = sigmoid(X @ w + b)", "Clip p to [eps, 1 - eps] before the logs", "Loss = -mean(y*log(p) + (1-y)*log(1-p))", "Return shape (n,) and keep y the same shape"]}
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "rag-assistant",
+  "title": "RAG Question-Answering Assistant",
+  "level": 4,
+  "hours": 20,
+  "blurb": "Answer questions over your own documents with citations, and measure how often it is right.",
+  "brief": "Build a retrieval-augmented question-answering assistant. Ingest and chunk a set of documents, retrieve the most relevant chunks for a question, build a grounded prompt, call an LLM (behind a small interface so the provider can be swapped or mocked), and return an answer with citations to the source chunks. The assistant must refuse to answer when retrieval finds nothing relevant. Create an evaluation set of questions (including some unanswerable ones) and report retrieval recall and answer quality.",
+  "requires": ["semantic-search"],
+  "concepts": ["embeddings-retrieval", "transformers-llms", "mlops-serving"],
+  "requirements": [
+    "Ingestion and chunking with source metadata",
+    "A retrieval component returning the top-k chunks with scores",
+    "A prompt template that grounds the model in the retrieved context and requests citations",
+    "An LLM client interface that can be mocked in tests",
+    "A no-answer path when similarity is below a threshold",
+    "An evaluation script with answerable and unanswerable questions and reported metrics"
+  ],
+  "deliverables": [
+    "The assistant as a package with a command-line or small web interface",
+    "An evaluation set and a script that produces the metrics",
+    "Tests that run with a mocked LLM and no network",
+    "README documenting the architecture and the evaluation results"
+  ],
+  "stretch": [
+    "Reranking and hybrid retrieval",
+    "Streaming responses",
+    "Conversation memory"
+  ],
+  "resume_bullet": "Built a RAG assistant with chunked retrieval, grounded citations and a refusal path, evaluated on a labeled question set including unanswerable queries.",
+  "review": {
+    "seed": false,
+    "checks": [
+      {"label": "Ingestion and chunking", "any": ["chunk", "ingest", "load_docs", "split_text"]},
+      {"label": "Retrieval", "any": ["retriev", "^search$", "top_k", "similarity"]},
+      {"label": "Prompt construction", "any": ["prompt", "template", "context", "system"]},
+      {"label": "LLM client interface", "any": ["llm", "generate", "completion", "client", "anthropic", "openai"]},
+      {"label": "Citations", "any": ["citation", "cite", "source", "reference"]},
+      {"label": "No-answer / guardrail path", "any": ["no_answer", "not_found", "fallback", "unanswerable", "threshold", "refuse"]},
+      {"label": "Evaluation", "any": ["evaluat", "ground_truth", "faithful", "recall", "eval_set"]},
+      {"label": "Mocked LLM in tests", "scope": "tests", "any": ["mock", "fake", "stub", "monkeypatch", "patch"]}
+    ]
+  }
+}

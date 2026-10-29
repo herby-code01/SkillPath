@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Log in - SkillPath{% endblock %}
+{% block content %}
+<section class="narrow">
+  <h1>Welcome back</h1>
+  <form method="post" class="form card">
+    {{ csrf_field() }}
+    <label>Username
+      <input name="username" required autocomplete="username" autofocus>
+    </label>
+    <label>Password
+      <input name="password" type="password" required autocomplete="current-password">
+    </label>
+    <button class="btn" type="submit">Log in</button>
+  </form>
+  <p class="muted">New here? <a href="{{ url_for('auth.register') }}">Create an account</a>.</p>
+</section>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% macro meter(label, pct, warn=false) %}
+<div class="meter-row">
+  <span>{{ label }}</span>
+  <div class="progress{{ ' warn' if warn }}" role="progressbar" aria-valuenow="{{ pct }}" aria-valuemin="0" aria-valuemax="100" aria-label="{{ label }}"><span style="width: {{ pct }}%"></span></div>
+  <span class="num">{{ pct }}%</span>
+</div>
+{% endmacro %}
+
+{% macro level_pill(level, track) %}
+<span class="pill">L{{ level }} &middot; {{ track['levels'][level|string] }}</span>
+{% endmacro %}
+
+{% macro diff(difficulty) %}
+<span class="diff-{{ difficulty|lower }}">{{ difficulty }}</span>
+{% endmacro %}
+
+{% macro timeline(schedule) %}
+<ol class="timeline">
+  {% for phase in schedule %}
+  <li>
+    <span class="when">{{ phase.start|fmtdate }}{% if phase.end != phase.start %} &ndash; {{ phase.end|fmtdate }}{% endif %}</span>
+    <span><strong>{{ phase.name }}.</strong> {{ phase.focus }}</span>
+  </li>
+  {% endfor %}
+</ol>
+{% endmacro %}
+
+{% macro problem_row(p) %}
+<li>
+  <span>
+    <a href="{{ p.url }}" target="_blank" rel="noopener noreferrer">#{{ p.n }} {{ p.title }}</a>
+    {{ diff(p.difficulty) }}
+    <br><small class="muted">{{ p.why }}</small>
+  </span>
+</li>
+{% endmacro %}
+
+{% macro submit_form(assignment) %}
+<form method="post" action="{{ url_for('submissions.submit', assignment_id=assignment['id']) }}"
+      enctype="multipart/form-data" class="form">
+  {{ csrf_field() }}
+  <label>Submit for review
+    <input type="file" name="file" accept=".zip,.py,.ipynb" required>
+    <small>A .zip of your project (best: includes tests and a README), or a single .py / .ipynb. Max 5 MB.
+      Your code is read, never run.</small>
+  </label>
+  <button class="btn" type="submit">Submit and get scored</button>
+</form>
+{% endmacro %}
+
+{% macro attempts_list(attempts) %}
+{% if attempts %}
+<h3>Attempts</h3>
+<ul class="list">
+  {% for s in attempts %}
+  <li>
+    <span><a href="{{ url_for('submissions.report', submission_id=s['id']) }}">{{ s['filename'] }}</a>
+      <small class="muted">&middot; {{ s['submitted_at']|fmtdatetime }}{% if s['late'] %} &middot; late{% endif %}</small></span>
+    <span class="pill {{ 'pill-good' if s['passed'] else 'pill-warn' }}">{{ s['score'] }}{{ ' · passed' if s['passed'] }}</span>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endmacro %}
+
+{% macro status_form(n, current, next_url) %}
+<form method="post" action="{{ url_for('learn.set_leetcode_status', number=n) }}" class="status-form">
+  {{ csrf_field() }}
+  <input type="hidden" name="next" value="{{ next_url }}">
+  {% for s in ('todo', 'attempted', 'solved') %}
+  <button type="submit" name="status" value="{{ s }}" class="{{ 'on ' ~ s if current == s }}" aria-pressed="{{ 'true' if current == s else 'false' }}">{{ s|capitalize }}</button>
+  {% endfor %}
+</form>
+{% endmacro %}

@@ -1,0 +1,13 @@
+{
+  "id": "ai-ml",
+  "name": "AI / Machine Learning",
+  "tagline": "From NumPy fundamentals to RAG systems and a tiny GPT.",
+  "description": "A 12-project path that starts with data handling and from-scratch models, builds through evaluation, trees, neural networks, NLP and vision, and finishes with retrieval-augmented generation, transformers and production serving.",
+  "levels": {
+    "1": "Foundations",
+    "2": "Core models",
+    "3": "Intermediate",
+    "4": "Applied systems",
+    "5": "Advanced"
+  }
+}

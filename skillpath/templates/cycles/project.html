@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% from "_macros.html" import meter, level_pill, timeline, problem_row, submit_form, attempts_list %}
+{% block title %}{{ project['title'] }} - SkillPath{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('cycles.roadmap') }}">&larr; Roadmap</a></p>
+<div class="page-head">
+  <div>
+    <p class="eyebrow">{{ level_pill(project['level'], track) }} &middot; about {{ project['hours'] }} hours</p>
+    <h1>{{ project['title'] }}</h1>
+    <p class="lead">{{ project['blurb'] }}</p>
+  </div>
+  {% if passed_score is not none %}<span class="pill pill-good">Passed &middot; {{ passed_score }}</span>{% endif %}
+</div>
+
+<div class="grid-2" style="align-items:start">
+  <div class="stack">
+    <section class="card prose">
+      <h2 style="margin-top:0">The brief</h2>
+      <p>{{ project['brief'] }}</p>
+      <h3>Requirements</h3>
+      <ul>{% for r in project['requirements'] %}<li>{{ r }}</li>{% endfor %}</ul>
+      <h3>Deliverables</h3>
+      <ul>{% for d in project['deliverables'] %}<li>{{ d }}</li>{% endfor %}</ul>
+      {% if project['stretch'] %}
+      <h3>Stretch goals</h3>
+      <ul>{% for s in project['stretch'] %}<li>{{ s }}</li>{% endfor %}</ul>
+      {% endif %}
+      <h3>Resume bullet this project earns</h3>
+      <p class="callout">{{ project['resume_bullet'] }}</p>
+    </section>
+
+    <section class="card">
+      <h2 style="margin-top:0">Concepts you need first</h2>
+      <p class="muted">Know these before you write code. Readiness for this project: <strong>{{ readiness }}%</strong>.</p>
+      {% for c in concepts %}
+        <div style="padding:.5rem 0; border-top:1px solid var(--line)">
+          <strong><a href="{{ url_for('learn.concept', concept_id=c['id']) }}">{{ c['title'] }}</a></strong>
+          <p class="muted" style="margin:.1rem 0 .3rem">{{ c['why'] }}</p>
+          {{ meter('Mastery', mastery[c['id']]['score']) }}
+        </div>
+      {% endfor %}
+    </section>
+  </div>
+
+  <div class="stack">
+    <section class="card card-accent">
+      {% if assignment %}
+        <p class="eyebrow">Active cycle</p>
+        <p><strong>{{ timing.days_left if not timing.overdue else 'Overdue' }}{% if not timing.overdue %} day{{ 's' if timing.days_left != 1 }} left{% endif %}</strong>
+           &middot; due {{ timing.due|fmtdate }}</p>
+        <div class="progress {{ 'warn' if timing.overdue }}"><span style="width: {{ timing.pct_time }}%"></span></div>
+        <div style="margin-top:1rem">{{ submit_form(assignment) }}</div>
+        {{ attempts_list(attempts) }}
+      {% elif passed_score is not none %}
+        <p><strong>You passed this project.</strong> Move on to the next one from your dashboard.</p>
+      {% elif missing %}
+        <p class="eyebrow">Locked</p>
+        <p>Pass these projects first:</p>
+        <ul>{% for m in missing %}<li>{{ m }}</li>{% endfor %}</ul>
+      {% elif other_open %}
+        <p>You already have a project in progress. Finish or drop it on your dashboard before starting this one.</p>
+      {% else %}
+        <p class="eyebrow">Ready when you are</p>
+        {{ meter('Readiness', readiness, warn=readiness < ready_threshold) }}
+        {% if readiness < ready_threshold %}
+          <p class="muted">Readiness is low. You can still start: the first {{ schedule[0].end|fmtdate }} of the cycle is a Learn phase.</p>
+        {% endif %}
+        <form method="post" action="{{ url_for('cycles.start_project', project_id=project['id']) }}">
+          {{ csrf_field() }}
+          <button class="btn" type="submit">Start a {{ weeks }}-week cycle</button>
+        </form>
+        <p class="muted" style="margin-top:.6rem"><small>Cycle length comes from your <a href="{{ url_for('cycles.settings') }}">settings</a>.</small></p>
+      {% endif %}
+    </section>
+
+    <section class="card">
+      <h3>{{ 'Cycle plan' if assignment else 'Suggested plan for a ' ~ weeks ~ '-week cycle' }}</h3>
+      {{ timeline(schedule) }}
+    </section>
+
+    <section class="card">
+      <h3>LeetCode sprint</h3>
+      <p class="muted">Problems tied to this project's concepts, easiest first.</p>
+      {% if sprint %}<ul class="list">{% for p in sprint %}{{ problem_row(p) }}{% endfor %}</ul>
+      {% else %}<p>All linked problems solved.</p>{% endif %}
+    </section>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{
+  "id": "distance-clustering",
+  "title": "Distance, kNN & Clustering",
+  "why": "Similarity is the idea behind recommendations, search and segmentation, and top-k selection is a classic coding-interview pattern.",
+  "explain": [
+    "Many methods rest on distance. k-nearest neighbors (kNN) classifies a point by a vote among its k closest training points. k-means groups points into k clusters by alternating two steps: assign each point to its nearest centroid, then move each centroid to the mean of its points, until assignments stop changing.",
+    "The distance you choose matters. Euclidean distance is sensitive to feature scale, so standardize first; cosine distance ignores magnitude and suits text and embeddings; Manhattan distance is more robust to outliers. In high dimensions distances concentrate (the curse of dimensionality), so nearest neighbors become less meaningful.",
+    "k-means needs k chosen (use the elbow on inertia or the silhouette score), is sensitive to initialization (use k-means++), and assumes roughly round clusters of similar size. A clustering is only useful if the segments are stable and actionable."
+  ],
+  "key_points": [
+    "kNN has no training step; all cost is paid at prediction time",
+    "k-means alternates assign and update; it converges to a local optimum",
+    "Standardize features before using Euclidean distance",
+    "Choose k with elbow and silhouette, then sanity-check with domain sense",
+    "k-means++ initialization reduces bad local optima"
+  ],
+  "pitfalls": [
+    "One large-scale feature dominating the distance",
+    "Reporting clusters without checking stability across random seeds"
+  ],
+  "leetcode": [
+    {"n": 973, "why": "Finding the k closest points is the kNN query; do it with a heap."},
+    {"n": 215, "why": "Quickselect and heaps find the k-th element without a full sort, the trick behind efficient neighbor search."},
+    {"n": 547, "why": "Connected components via union-find or DFS is graph-based clustering."},
+    {"n": 200, "why": "Flood-filling grid regions is the same idea as connected-component clustering on pixels."},
+    {"n": 23, "why": "Merging k sorted lists with a heap is how sharded nearest-neighbor results get combined."}
+  ],
+  "industry": [
+    {"kind": "concept", "q": "How do you choose k in k-means?",
+     "key_points": ["Plot inertia against k and look for the elbow", "Silhouette score for cohesion vs separation", "Stability across seeds and subsamples", "Business interpretability of the segments"]},
+    {"kind": "design", "q": "kNN prediction is too slow on 10 million points. How do you speed it up?",
+     "key_points": ["KD-tree or ball tree work in low dimensions", "Approximate nearest neighbor indexes (HNSW, IVF, LSH) in high dimensions", "Reduce dimensionality or quantize vectors", "Cache frequent queries"]},
+    {"kind": "concept", "q": "Your clusters are dominated by one feature with a huge scale. Diagnose and fix it.",
+     "key_points": ["Unscaled features dominate Euclidean distance", "Standardize or robust-scale the features", "Consider feature weighting or dropping redundant features", "Re-evaluate with silhouette after the change"]}
+  ]
+}

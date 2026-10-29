@@ -1,0 +1,41 @@
+{
+  "id": "semantic-search",
+  "title": "Semantic Search Engine",
+  "level": 4,
+  "hours": 16,
+  "blurb": "Compare keyword search and embedding search on your own document set, with real retrieval metrics.",
+  "brief": "Build a search engine over a document collection (articles, docs or notes). Implement a TF-IDF or BM25 baseline, add embedding-based retrieval with chunking and cosine similarity, and optionally combine both. Create a small labeled set of queries with the documents that should be returned, then report recall@k and MRR for every method so you can show, with numbers, when embeddings help.",
+  "requires": ["spam-filter"],
+  "concepts": ["embeddings-retrieval", "nlp-text", "evaluation"],
+  "requirements": [
+    "Document loading and chunking with configurable size and overlap",
+    "A keyword baseline (TF-IDF or BM25)",
+    "Embedding-based retrieval (a local sentence-embedding model or an embeddings API behind a small interface)",
+    "Cosine-similarity top-k search over a stored index",
+    "A labeled evaluation set and recall@k and MRR (or nDCG) metrics",
+    "A comparison table of methods and a short analysis of failure cases"
+  ],
+  "deliverables": [
+    "Indexing and search modules plus a simple command-line search tool",
+    "The evaluation set and a script that regenerates the results table",
+    "README with design decisions (chunk size, model choice) justified by the metrics"
+  ],
+  "stretch": [
+    "Hybrid keyword + vector ranking",
+    "A reranking step",
+    "An approximate nearest-neighbor index"
+  ],
+  "resume_bullet": "Built and evaluated a semantic search engine (TF-IDF/BM25 baseline vs embeddings, recall@k and MRR) over a custom document corpus.",
+  "review": {
+    "seed": false,
+    "checks": [
+      {"label": "Chunking", "any": ["chunk", "split_text", "overlap", "window"]},
+      {"label": "Keyword baseline", "any": ["tfidf", "tf_idf", "bm25"]},
+      {"label": "Embeddings", "any": ["embed", "encode", "sentence_transformers", "embedding"]},
+      {"label": "Cosine similarity", "any": ["cosine", "similarity", "^norm$", "normalize"]},
+      {"label": "Top-k search", "any": ["top_k", "topk", "argsort", "argpartition", "^search$", "nlargest"]},
+      {"label": "Retrieval metrics", "any": ["recall", "^mrr", "ndcg", "hit_rate", "precision_at"]},
+      {"label": "Evaluation data", "files": true, "any": ["eval", "queries", "labels", "ground_truth"]}
+    ]
+  }
+}

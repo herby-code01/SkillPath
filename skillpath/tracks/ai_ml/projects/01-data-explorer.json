@@ -1,0 +1,40 @@
+{
+  "id": "data-explorer",
+  "title": "CSV Data Explorer CLI",
+  "level": 1,
+  "hours": 8,
+  "blurb": "A command-line tool that profiles any CSV and writes a cleaning report.",
+  "brief": "Build a command-line tool that takes a CSV file and prints a profile of it: column types, missing values, duplicates, summary statistics, correlations between numeric columns, and suggested cleaning steps. Then add a --clean option that applies safe fixes and writes a new CSV. This is the first thing you do on every real dataset, so make it solid.",
+  "requires": [],
+  "concepts": ["python-numpy", "data-wrangling"],
+  "requirements": [
+    "Accept a CSV path (and an optional --clean output path) through a command-line interface",
+    "Report each column's inferred type, missing count and percentage, and number of unique values",
+    "Compute summary statistics (mean, std, min, max, quartiles) for numeric columns",
+    "Compute pairwise correlations and flag pairs above a threshold",
+    "Detect duplicate rows and report them",
+    "Apply cleaning: fill or flag missing values, drop duplicates, and report what changed"
+  ],
+  "deliverables": [
+    "Source code organized into small functions",
+    "A README showing example output on a public dataset",
+    "Unit tests for at least the missing-value and duplicate logic"
+  ],
+  "stretch": [
+    "Detect outliers with the IQR rule and report them",
+    "Export the profile as Markdown or HTML"
+  ],
+  "resume_bullet": "Built a CLI data-profiling tool (Python/pandas) that automates EDA and cleaning for arbitrary CSVs, covered by unit tests.",
+  "review": {
+    "seed": false,
+    "checks": [
+      {"label": "Command-line interface", "any": ["argparse", "click", "typer", "^argv$"]},
+      {"label": "Loads CSV data", "any": ["read_csv", "DictReader", "csv"]},
+      {"label": "Missing-value reporting", "any": ["isna", "isnull", "missing", "null_count"]},
+      {"label": "Summary statistics", "any": ["describe", "quantile", "percentile", "summary", "^std$", "^mean$"]},
+      {"label": "Correlation analysis", "any": ["corr", "correlation", "covariance"]},
+      {"label": "Duplicate handling", "any": ["duplicated", "drop_duplicates", "duplicate"]},
+      {"label": "Cleaning step", "any": ["fillna", "impute", "dropna", "clean", "astype"]}
+    ]
+  }
+}

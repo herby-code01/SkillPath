@@ -1,0 +1,36 @@
+{
+  "id": "trees-ensembles",
+  "title": "Decision Trees & Ensembles",
+  "why": "Gradient-boosted trees still win most tabular-data problems in industry, and trees are a favorite interview topic.",
+  "explain": [
+    "A decision tree asks a sequence of yes/no questions about features. At each node it picks the split that most reduces impurity, using Gini = 1 - sum(p^2) or entropy = -sum(p log p), then recurses until a stopping rule (maximum depth, minimum samples) is reached. Trees handle mixed feature types and need little preprocessing, but a single deep tree overfits badly.",
+    "Ensembles fix that. Bagging and random forests train many trees on bootstrap samples with random feature subsets and average their votes, which reduces variance. Boosting (gradient boosting, XGBoost, LightGBM) builds trees one after another, each correcting the previous errors, which reduces bias.",
+    "Feature importance comes from how much each feature reduces impurity, or from permutation importance, which is less biased. Trees are piecewise constant, so they cannot extrapolate beyond the range seen in training."
+  ],
+  "key_points": [
+    "Greedy split search: try thresholds, keep the best impurity decrease",
+    "Depth and minimum-leaf size control overfitting",
+    "Random forest = bagging + random feature subsets (variance reduction)",
+    "Boosting fits residual errors sequentially (bias reduction)",
+    "Permutation importance on held-out data is more trustworthy than impurity importance"
+  ],
+  "pitfalls": [
+    "Impurity importance favors high-cardinality features such as IDs",
+    "Trees cannot extrapolate beyond the training range"
+  ],
+  "leetcode": [
+    {"n": 104, "why": "Recursive depth is the same recursion you use to limit tree growth."},
+    {"n": 105, "why": "Building a tree from traversals practices constructing nodes recursively from partitioned data."},
+    {"n": 98, "why": "Validating a BST with value ranges mirrors how split thresholds bound each child."},
+    {"n": 75, "why": "Partitioning an array around a pivot is exactly what a split does to samples."},
+    {"n": 124, "why": "Aggregating gains from subtrees in post-order is the pattern behind pruning and boosting gain calculations."}
+  ],
+  "industry": [
+    {"kind": "concept", "q": "Why does a random forest generalize better than one deep decision tree?",
+     "key_points": ["Single deep trees have high variance", "Bootstrap samples and random feature subsets decorrelate the trees", "Averaging decorrelated errors reduces variance", "Out-of-bag samples give a free validation estimate"]},
+    {"kind": "concept", "q": "Random forest or gradient boosting: when do you choose each?",
+     "key_points": ["Forest: robust defaults, parallel, hard to overfit badly", "Boosting: usually higher accuracy but needs tuning and early stopping", "Check both with proper cross-validation", "Consider training time and interpretability needs"]},
+    {"kind": "concept", "q": "Impurity-based feature importance ranks a customer ID column highly. Why, and what do you do?",
+     "key_points": ["High-cardinality features offer many split points, which biases importance", "Use permutation importance on validation data", "Drop identifiers and leakage columns", "Sanity-check with a shuffled-feature baseline"]}
+  ]
+}

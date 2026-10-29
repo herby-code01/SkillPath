@@ -1,0 +1,41 @@
+{
+  "id": "mini-nn",
+  "title": "Neural Network from Scratch",
+  "level": 3,
+  "hours": 16,
+  "blurb": "Write forward and backward passes in NumPy and train a digit classifier.",
+  "brief": "Build a small multi-layer neural network using only NumPy: dense layers, ReLU/tanh and softmax, cross-entropy loss, backpropagation, mini-batch SGD with momentum. Train it on a digit-recognition dataset (scikit-learn's bundled digits works offline). Prove your backprop is correct with a numerical gradient check and show training and validation curves.",
+  "requires": ["logreg-eval"],
+  "concepts": ["neural-nets", "python-numpy", "classification"],
+  "requirements": [
+    "Dense layers with sensible weight initialization (He or Xavier)",
+    "Forward pass with at least one nonlinearity and a softmax output",
+    "Cross-entropy loss",
+    "A backward pass implementing backpropagation by hand",
+    "A numerical gradient check that compares analytic and numeric gradients",
+    "Mini-batch training loop with SGD (momentum or Adam) and validation accuracy tracking"
+  ],
+  "deliverables": [
+    "The network implementation as a module",
+    "Training script producing loss/accuracy curves",
+    "Gradient-check test that fails if backprop is wrong"
+  ],
+  "stretch": [
+    "Add dropout and weight decay",
+    "Implement Adam"
+  ],
+  "resume_bullet": "Implemented a neural network with manual backpropagation and gradient checking in NumPy, reaching high accuracy on handwritten digits.",
+  "review": {
+    "seed": true,
+    "checks": [
+      {"label": "Forward pass and activations", "any": ["forward", "relu", "tanh", "activation"]},
+      {"label": "Softmax output", "any": ["softmax"]},
+      {"label": "Backpropagation", "any": ["backward", "backprop", "delta", "^grad"]},
+      {"label": "Cross-entropy loss", "any": ["cross_entropy", "^loss", "nll"]},
+      {"label": "Gradient checking", "any": ["grad_check", "gradient_check", "numerical_grad", "numeric_grad", "^eps$", "epsilon"]},
+      {"label": "Weight initialization", "any": ["he_init", "xavier", "glorot", "^init", "randn", "default_rng"]},
+      {"label": "Optimizer / mini-batches", "any": ["sgd", "momentum", "adam", "optimizer", "batch"]},
+      {"label": "Evaluation", "any": ["accuracy", "evaluate", "^predict$"]}
+    ]
+  }
+}
